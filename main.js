@@ -1,62 +1,53 @@
-// uses strict mode so strings are not coerced, variables are not hoisted, etc... 
-'use strict';
+var Rock = document.getElementById('Rock').addEventListener('click', run);
+var Paper = document.getElementById('Paper').addEventListener('click', run);
+var Scissors = document.getElementById('Scissors').addEventListener('click', run);
 
-// brings in the assert module for unit testing
-const assert = require('assert');
-// brings in the readline module to access the command line
-const readline = require('readline');
-// use the readline module to print out to the command line
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+var computerChoice;
+var playerChoice;
 
-// the function that will be called by the unit test below
-const rockPaperScissors = (hand1, hand2) => {
+var player = document.getElementById('player');
+var computer = document.getElementById('computer');
+var outcome = document.getElementById('outcome');
 
-  // Write code here
-  // Use the unit test to see what is expected
-
+function run() {
+  	playerChoice = this.innerText;
+  	computerGamble();
+  	compare();
 }
 
-// the first function called in the program to get an input from the user
-// to run the function use the command: node main.js
-// to close it ctrl + C
-function getPrompt() {
-  rl.question('hand1: ', (answer1) => {
-    rl.question('hand2: ', (answer2) => {
-      console.log( rockPaperScissors(answer1, answer2) );
-      getPrompt();
-    });
-  });
-}
+function computerGamble() {
+  	var dice = Math.random();
+	if (dice <= 0.33) {
+		computerChoice = "Rock";
+    } else if (dice > 0.33 && dice <= 0.66) {
+    	computerChoice = "Paper";
+    } else {
+    	computerChoice = "Scissors";
+    }
+ }
+ 
+ function compare() {
+ 	player.innerHTML = "You have chosen " + playerChoice;
+ 	computer.innerHTML = "Computer chooses " + computerChoice;
 
-// Unit Tests
-// You use them run the command: npm test main.js
-// to close them ctrl + C
-if (typeof describe === 'function') {
+ 	if (playerChoice == computerChoice) {
+ 		outcome.innerHTML = "Stalemate";
+ 		
+ 	} else if (playerChoice === "Rock" && computerChoice === "Paper") {
+ 		outcome.innerHTML = "Defeat!";
+ 	} else if (playerChoice === "Rock" && computerChoice === "Scissors") {
+ 		outcome.innerHTML = "Victory!";
+ 	
 
-  // most are notes for human eyes to read, but essentially passes in inputs then compares if the function you built return the expected output.
-  describe('#rockPaperScissors()', () => {
-    it('should detect a tie', () => {
-      assert.equal(rockPaperScissors('rock', 'rock'), "It's a tie!");
-      assert.equal(rockPaperScissors('paper', 'paper'), "It's a tie!");
-      assert.equal(rockPaperScissors('scissors', 'scissors'), "It's a tie!");
-    });
-    it('should detect which hand won', () => {
-      assert.equal(rockPaperScissors('rock', 'paper'), "Hand two wins!");
-      assert.equal(rockPaperScissors('paper', 'scissors'), "Hand two wins!");
-      assert.equal(rockPaperScissors('rock', 'scissors'), "Hand one wins!");
-    });
-    it('should scrub input to ensure lowercase with "trim"ed whitepace', () => {
-      assert.equal(rockPaperScissors('rOcK', ' paper '), "Hand two wins!");
-      assert.equal(rockPaperScissors('Paper', 'SCISSORS'), "Hand two wins!");
-      assert.equal(rockPaperScissors('rock ', 'sCiSsOrs'), "Hand one wins!");
-    });
-  });
-} else {
+ 	} else if (playerChoice === "Paper" && computerChoice === "Rock") {
+ 		outcome.innerHTML = "Victory!";
+ 	} else if (playerChoice === "Paper" && computerChoice === "Scissors") {
+ 		outcome.innerHTML = "Defeat!";
 
-  // always returns ask the user for another input
-  getPrompt();
 
-}
+ 	} else if (playerChoice === "Scissors" && computerChoice === "Rock") {
+ 		outcome.innerHTML = "Defeat!";
+ 	} else if (playerChoice === "Scissors" && computerChoice === "Paper") {
+ 		outcome.innerHTML = "Victory!";
+ 	}
+ }
